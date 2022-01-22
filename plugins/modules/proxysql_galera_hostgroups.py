@@ -73,7 +73,7 @@ def perform_checks(module):
             msg="backup_writer_hostgroup and offline_hostgroup must be different integer values"
         )
 
-    if not module.params["active"] in [0,1]:
+    if not module.params["active"] in [0, 1]:
         module.fail_json(
             msg="active must be either 0 or 1"
         )
@@ -92,6 +92,7 @@ def perform_checks(module):
         module.fail_json(
             msg="max_transactions_behind must be an integer greater than or equal to 0"
         )
+
 
 class ProxySQLGaleraHostgroup(object):
 
@@ -304,7 +305,6 @@ class ProxySQLGaleraHostgroup(object):
 
         cursor.execute(query_string, (self.backup_writer_hostgroup, self.writer_hostgroup))
 
-
     def update_reader_hostgroup(self, cursor):
         query_string = ("UPDATE mysql_galera_hostgroups "
                         "SET reader_hostgroup = %s "
@@ -407,10 +407,8 @@ def main():
 
     if proxysql_galera_group.state == "present":
         try:
-            if not proxysql_galera_group.check_galera_group_config(cursor,
-                                                               keys=True):
-                proxysql_galera_group.create_galera_group(result,
-                                                      cursor)
+            if not proxysql_galera_group.check_galera_group_config(cursor, keys=True):
+                proxysql_galera_group.create_galera_group(result, cursor)
             else:
                 proxysql_galera_group.update_galera_group(result, cursor)
 
@@ -423,8 +421,7 @@ def main():
 
     elif proxysql_galera_group.state == "absent":
         try:
-            if proxysql_galera_group.check_galera_group_config(cursor,
-                                                           keys=True):
+            if proxysql_galera_group.check_galera_group_config(cursor, keys=True):
                 proxysql_galera_group.delete_galera_group(result, cursor)
             else:
                 result['changed'] = False
